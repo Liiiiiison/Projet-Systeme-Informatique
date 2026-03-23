@@ -8,21 +8,21 @@ void yyerror(char *s);
 %token tMAIN tCONST tINT tCOMA tSEMICOLON tAO tAF tPRINT tDEC tFL tEGAL tPO tPF tSOU tADD tDIV tMUL tERROR
 %token <nb> tNB
 %token <var> tID
-%type <nb> Expr DivMul Terme
+%type <nb> Expr DivMul Terme Code Declaration
 %start Compiler
 %%
 Compiler :	  Compiler | Start ;
-Start :		tMAIN tAO Code ;
-
-Declaration : tCONST tID tSEMICOLON { } //int a; allouer de la mémoire (vérifier si y en a plusieurs)
-		| tINT tID tEGAL tNB tSEMICOLON {} //int a=1; ""
-		| Declaration {}
+Start :		tMAIN tAO Code ; // tMAIN tAO Code tAF ?
 
 Code :		Declaration {}
-		| Expr tSEMICOLON{} //a=b+c; b+c est une expression
-		| tID tEGAL Expr tSEMICOLON {}
+		| Expr tSEMICOLON {$$ = $1 ;} //a=b+c; b+c est une expression
+		| tID tEGAL Expr tSEMICOLON {var[int($1)]=$3 ;} // pas sûr de celui la
 		| Code Code {}
-		| Affichage {};
+		| Affichage {$$ = $1};
+
+Declaration : tCONST tID tSEMICOLON {} //int a; allouer de la mémoire (vérifier si y en a plusieurs)
+		| tINT tID tEGAL tNB tSEMICOLON {var[int($2)]=$4 ; } //int a=1; ""
+		| Declaration {}
 
 //code de la calculatrice (à refaire avec les bonnes priorités de calcul %left)
 Expr :		  Expr tADD DivMul { $$ = $1 + $3; }
@@ -36,7 +36,7 @@ Terme :		  tPO Expr tPF { $$ = $2; }
 		| tNB { $$ = $1; }
 
 
-Affichage : tPRINT tPO tDEC tCOMA tNB tPF tSEMICOLON {}
+Affichage : tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON {printf("%d",$5) ;} // à compléter pour plus tard avec les autres possibilités
 
 /*Calculatrice : Calcul Calculatrice | Calcul ;		
 Calcul :	  Expr tFL { printf("> %d\n", $1); }

@@ -34,7 +34,7 @@
 	  yylval.nb = atoi(yytext);
 	  return tNB;
 	}
-[0-9]+e?-[0-9]+|[0-9]+ {
+[0-9]+e?-[0-9]+|[0-9]+ { // [0-9]+e(-[0-9]+|[0-9]+)
 	  yyval.nb = strof(yytext);
 	  return tNB;
 	}
