@@ -5,24 +5,26 @@ int var[26];
 void yyerror(char *s);
 %}
 %union { int nb; char var; }
-%token tMAIN tCONST tINT tCOMA tSEMICOLON tAO tAF tPRINT tDEC tFL tEGAL tPO tPF tSOU tADD tDIV tMUL tERROR
+%token tMAIN tCONST tINT tCOMA tSEMICOLON tAO tAF tPRINT tDEC tEGAL tPO tPF tSOU tADD tDIV tMUL tERROR
 %token <nb> tNB
 %token <var> tID
 %type <nb> Expr DivMul Terme Code Declaration
+%type <var> Affichage
 %start Compiler
 %%
-Compiler :	  Compiler | Start ;
-Start :		tMAIN tAO Code ; // tMAIN tAO Code tAF ?
+Compiler :		tINT tMAIN tPO tPF tAO Codes tAF // tMAIN tAO Code tAF ?
 
-Code :		Declaration {}
-		| Expr tSEMICOLON {$$ = $1 ;} //a=b+c; b+c est une expression
-		| tID tEGAL Expr tSEMICOLON {var[int($1)]=$3 ;} // pas sûr de celui la
-		| Code Code {}
-		| Affichage {$$ = $1};
+Codes :  Code Codes {printf("CODES - Code Codes\n");}
+		| Code {printf("CODES - Code tout seul\n");}
 
-Declaration : tCONST tID tSEMICOLON {} //int a; allouer de la mémoire (vérifier si y en a plusieurs)
-		| tINT tID tEGAL tNB tSEMICOLON {var[int($2)]=$4 ; } //int a=1; ""
-		| Declaration {}
+Code :		Declaration {printf("CODE - Déclaration\n"); $$ = $1;}
+		| Expr tSEMICOLON {printf("CODE - Expr\n"); $$ = $1;} //a=b+c; b+c est une expression
+		| tID tEGAL Expr tSEMICOLON {printf("CODE - a=1; \n");}
+		| Affichage {printf("CODE - Affichage\n");$$ = $1;}
+
+Declaration : tCONST tID tSEMICOLON {$$=1; printf("DECLARATION - const\n"); } //int a; allouer de la mémoire (vérifier si y en a plusieurs)
+		| tINT tID tEGAL tNB tSEMICOLON {$$=1; printf("DECLARATION - int = \n"); } 
+		| tINT tID {printf("DECLARATION - int\n");};
 
 //code de la calculatrice (à refaire avec les bonnes priorités de calcul %left)
 Expr :		  Expr tADD DivMul { $$ = $1 + $3; }
@@ -36,7 +38,7 @@ Terme :		  tPO Expr tPF { $$ = $2; }
 		| tNB { $$ = $1; }
 
 
-Affichage : tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON {printf("%d",$5) ;} // à compléter pour plus tard avec les autres possibilités
+Affichage : tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON {$$ = $5 ; printf("%d",$5) ;} // à compléter pour plus tard avec les autres possibilités
 
 /*Calculatrice : Calcul Calculatrice | Calcul ;		
 Calcul :	  Expr tFL { printf("> %d\n", $1); }

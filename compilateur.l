@@ -8,7 +8,7 @@
 
 %%
 
-"main()" { return tMAIN; }
+"main" { return tMAIN; }
 "const" { return tCONST;}
 "int" { return tINT;}
 [ \t]+ ;
@@ -35,8 +35,8 @@
 	  return tNB;
 	}
 [0-9]+e?-[0-9]+|[0-9]+ { // [0-9]+e(-[0-9]+|[0-9]+)
-	  yyval.nb = strof(yytext);
+	  yylval.nb = atof(yytext);
 	  return tNB;
 	}
-\n	{ return tFL; }
+[\n]+ ;	
 .	{ return tERROR; }
