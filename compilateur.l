@@ -27,7 +27,7 @@
 "%d" {return tDEC; }
 
 [A-Za-z][A-Za-z0-9_]* {
-	  yylval.var = yytext;
+	  yylval.var = strdup(yytext);
 	  return tID;
 	}
 [0-9]+	{
