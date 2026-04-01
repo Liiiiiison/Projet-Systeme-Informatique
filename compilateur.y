@@ -121,7 +121,7 @@ Terme :		  tPO Expr tPF { $$ = $2; }
 %%
 void yyerror(char *s) { fprintf(stderr, "%s\n", s); }
 int main(void) {
-  printf("Calculatrice\n"); // yydebug=1;
+  printf("test du compilateur\n"); // yydebug=1;
   init_mem();
   yyparse();
   return 0;

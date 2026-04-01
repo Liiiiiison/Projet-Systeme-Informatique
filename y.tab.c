@@ -1229,13 +1229,13 @@ yyreduce:
 			} else {
 				int index = get_index((yyvsp[-3].var));
 				if (variable == 0) {
-					int a = init_const((yyvsp[-3].var));
+					int a = init_const((yyvsp[-3].var)); // pq int a ? c'est quoi a ? [Warning : unused variable a]
 				} else {
 					int a = init_int((yyvsp[-3].var));
 				}
 				printf("\tAFC %d $3\n", index);
 			}
-			reinit() ; // réinitialise l'index des variables temporaires 
+			reinit_temp() ; // réinitialise l'index des variables temporaires 
 			free((yyvsp[-3].var)); //on free après le strdup du compilateur.l -> TODO pour chaque tID
 		}
 #line 1242 "y.tab.c"

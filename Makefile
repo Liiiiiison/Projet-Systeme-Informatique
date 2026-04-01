@@ -5,7 +5,7 @@ BIN=compilateur
 CC=gcc
 CFLAGS=-Wall -g
 
-OBJ=y.tab.c lex.yy.c
+OBJ=y.tab.c lex.yy.c 
 
 all: $(BIN)
 
@@ -19,7 +19,7 @@ lex.yy.c: $(LEX)
 	flex $<
 
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) mem.c $^ -o $@
 
 clean:
 	rm $(OBJ) y.tab.h compilateur

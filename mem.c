@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct data {
     char name[100]; //VERIFIER LA TAILLE DANS LES FTC CHAR *

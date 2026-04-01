@@ -6,14 +6,7 @@ struct data {
     char init;
     int depth;
     char var;
-};
-
-
-struct data mem[50]; // quelle taille choisir ? 
-int current_idx; 
-int current_depth;
-int temp_idx ;
-int temp_name ;
+}; // utile si on le met en paramètre des fonctions en dessous
 
 void init_mem();
 

@@ -844,7 +844,7 @@ case 18:
 YY_RULE_SETUP
 #line 29 "compilateur.l"
 {
-	  yylval.var = strdup(yytext);
+	  yylval.var = strdup(yytext); // strdup -> malloc + strcpy => faire un free après
 	  return tID;
 	}
 	YY_BREAK
