@@ -106,7 +106,7 @@ extern int yydebug;
 union YYSTYPE
 {
 #line 7 "compilateur.y"
- int nb; char var; 
+ int nb; char * var; 
 
 #line 112 "y.tab.h"
 

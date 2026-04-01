@@ -27,7 +27,7 @@
 "%d" {return tDEC; }
 
 [A-Za-z][A-Za-z0-9_]* {
-	  yylval.var = strdup(yytext);
+	  yylval.var = strdup(yytext); // strdup -> malloc + strcpy => faire un free après
 	  return tID;
 	}
 [0-9]+	{

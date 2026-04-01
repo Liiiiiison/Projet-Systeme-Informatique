@@ -844,7 +844,7 @@ case 18:
 YY_RULE_SETUP
 #line 29 "compilateur.l"
 {
-	  yylval.var = yytext;
+	  yylval.var = strdup(yytext);
 	  return tID;
 	}
 	YY_BREAK
