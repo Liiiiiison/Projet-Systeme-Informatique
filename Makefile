@@ -5,7 +5,8 @@ BIN=compilateur
 CC=gcc
 CFLAGS=-Wall -g
 
-OBJ=y.tab.c lex.yy.c 
+OBJ1=y.tab.c lex.yy.c 
+OBJ2=y.tab.c lex.yy.c mem.c
 
 all: $(BIN)
 
@@ -18,11 +19,11 @@ y.tab.c: $(GRM)
 lex.yy.c: $(LEX)
 	flex $<
 
-$(BIN): $(OBJ)
-	$(CC) $(CFLAGS) mem.c $^ -o $@
+$(BIN): $(OBJ2) 
+	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	rm $(OBJ) y.tab.h compilateur
+	rm $(OBJ1) y.tab.h compilateur
 
 test:
 	cat test.c | ./compilateur

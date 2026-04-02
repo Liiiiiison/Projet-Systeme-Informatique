@@ -556,7 +556,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  8
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  21
+#define YYNRULES  20
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  52
 
@@ -610,8 +610,8 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int8 yyrline[] =
 {
        0,    18,    18,    20,    21,    23,    24,    43,    46,    50,
-      63,    70,    85,    88,    91,    94,    97,   100,   101,   102,
-     103,   105
+      63,    73,    91,    94,    97,   100,   103,   104,   105,   106,
+     108
 };
 #endif
 
@@ -670,10 +670,10 @@ static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,
        0,     0,     0,     4,     5,     7,     0,     0,     0,     0,
-       2,     3,     0,    10,     0,     0,     0,    20,    19,     0,
-      17,     8,     0,     0,     0,     0,     6,     0,     0,     0,
-       0,     0,    11,     0,    18,    13,    12,    16,    14,     9,
-       0,    21
+       2,     3,     0,    10,     0,     0,     0,    19,    18,     0,
+      16,     8,     0,     0,     0,     0,     6,     0,     0,     0,
+       0,     0,    11,     0,    17,    13,    12,    15,    14,     9,
+       0,    20
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -727,16 +727,16 @@ static const yytype_int8 yystos[] =
 static const yytype_int8 yyr1[] =
 {
        0,    22,    23,    24,    24,    25,    25,    25,    26,    26,
-      26,    26,    27,    27,    27,    27,    27,    27,    28,    28,
-      28,    29
+      26,    26,    27,    27,    27,    27,    27,    28,    28,    28,
+      29
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     7,     2,     1,     1,     4,     1,     4,     6,
-       3,     5,     3,     3,     3,     3,     3,     1,     3,     1,
-       1,     7
+       3,     5,     3,     3,     3,     3,     1,     3,     1,     1,
+       7
 };
 
 
@@ -1229,9 +1229,9 @@ yyreduce:
 			} else {
 				int index = get_index((yyvsp[-3].var));
 				if (variable == 0) {
-					int a = init_const((yyvsp[-3].var)); // pq int a ? c'est quoi a ? [Warning : unused variable a]
+					int a = init_const(index); // pq int a ? c'est quoi a ? [Warning : unused variable a]
 				} else {
-					int a = init_int((yyvsp[-3].var));
+					int a = init_int(index);
 				}
 				printf("\tAFC %d $3\n", index);
 			}
@@ -1277,20 +1277,26 @@ yyreduce:
   case 10: /* Declaration: tINT tID tSEMICOLON  */
 #line 63 "compilateur.y"
                                      {
-			printf("DECLARATION - int = \n");
+
+			printf("DECLARATION - int \n");
+
 			int adresse = add_int((yyvsp[-1].var));
+
 			if (adresse==-1){
-				perror("\tErreur de compilation : constante déjà déclarée\n");
+				perror("\tErreur de compilation : entier déjà déclarée\n");
 			}
 		}
-#line 1287 "y.tab.c"
+#line 1290 "y.tab.c"
     break;
 
   case 11: /* Declaration: tINT tID tEGAL tNB tSEMICOLON  */
-#line 70 "compilateur.y"
+#line 73 "compilateur.y"
                                                 { 
+			
 			printf("DECLARATION - int = \n");
+
 			int adresse = add_int((yyvsp[-3].var));
+			free((yyvsp[-3].var));
 			if (adresse!=-1){
 				if (init_int(adresse)!=-1) {
 					printf("\tAFC %d $4\n", adresse);
@@ -1301,81 +1307,73 @@ yyreduce:
 				perror("\tErreur de compilation : entier déjà déclaré\n");
 			}	
 		}
-#line 1305 "y.tab.c"
+#line 1311 "y.tab.c"
     break;
 
   case 12: /* Expr: Expr tADD Expr  */
-#line 85 "compilateur.y"
+#line 91 "compilateur.y"
                       {
 			printf("EXPR - ADD\n");
 			printf("\tADD $$ $1 $3\n"); }
-#line 1313 "y.tab.c"
+#line 1319 "y.tab.c"
     break;
 
   case 13: /* Expr: Expr tSOU Expr  */
-#line 88 "compilateur.y"
+#line 94 "compilateur.y"
                                  {
 			printf("EXPR - SOU\n");
 			printf("\tSOU $$ $1 $3\n"); }
-#line 1321 "y.tab.c"
+#line 1327 "y.tab.c"
     break;
 
   case 14: /* Expr: Expr tMUL Expr  */
-#line 91 "compilateur.y"
-                                 {
-			printf("EXPR - MUL\n");
-			printf("\tMUL $$ $1 $3\n"); }
-#line 1329 "y.tab.c"
-    break;
-
-  case 15: /* Expr: Expr tMUL Expr  */
-#line 94 "compilateur.y"
-                                 {
-			printf("EXPR - MUL\n");
-			printf("\tMUL $$ $1 $3\n"); }
-#line 1337 "y.tab.c"
-    break;
-
-  case 16: /* Expr: Expr tDIV Expr  */
 #line 97 "compilateur.y"
+                                 {
+			printf("EXPR - MUL\n");
+			printf("\tMUL $$ $1 $3\n"); }
+#line 1335 "y.tab.c"
+    break;
+
+  case 15: /* Expr: Expr tDIV Expr  */
+#line 100 "compilateur.y"
                                  {
 			printf("EXPR - DIV\n");
 			printf("\tDIV $$ $1 $3\n"); }
-#line 1345 "y.tab.c"
+#line 1343 "y.tab.c"
     break;
 
-  case 17: /* Expr: Terme  */
-#line 100 "compilateur.y"
-                        { (yyval.nb) = (yyvsp[0].nb); }
-#line 1351 "y.tab.c"
-    break;
-
-  case 18: /* Terme: tPO Expr tPF  */
-#line 101 "compilateur.y"
-                               { (yyval.nb) = (yyvsp[-1].nb); }
-#line 1357 "y.tab.c"
-    break;
-
-  case 19: /* Terme: tID  */
-#line 102 "compilateur.y"
-                      { (yyval.nb) = get_index((yyvsp[0].var)); }
-#line 1363 "y.tab.c"
-    break;
-
-  case 20: /* Terme: tNB  */
+  case 16: /* Expr: Terme  */
 #line 103 "compilateur.y"
-                      { (yyval.nb) = add_temp(); }
-#line 1369 "y.tab.c"
+                        { (yyval.nb) = (yyvsp[0].nb); }
+#line 1349 "y.tab.c"
     break;
 
-  case 21: /* Affichage: tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON  */
+  case 17: /* Terme: tPO Expr tPF  */
+#line 104 "compilateur.y"
+                               { (yyval.nb) = (yyvsp[-1].nb); }
+#line 1355 "y.tab.c"
+    break;
+
+  case 18: /* Terme: tID  */
 #line 105 "compilateur.y"
+                      { (yyval.nb) = get_index((yyvsp[0].var)); }
+#line 1361 "y.tab.c"
+    break;
+
+  case 19: /* Terme: tNB  */
+#line 106 "compilateur.y"
+                      { (yyval.nb) = add_temp(); }
+#line 1367 "y.tab.c"
+    break;
+
+  case 20: /* Affichage: tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON  */
+#line 108 "compilateur.y"
                                                      {(yyval.var) = (yyvsp[-2].var) ; printf("%d\n",(yyvsp[-2].var)) ;}
-#line 1375 "y.tab.c"
+#line 1373 "y.tab.c"
     break;
 
 
-#line 1379 "y.tab.c"
+#line 1377 "y.tab.c"
 
       default: break;
     }
@@ -1568,11 +1566,11 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 121 "compilateur.y"
+#line 124 "compilateur.y"
 
 void yyerror(char *s) { fprintf(stderr, "%s\n", s); }
 int main(void) {
-  printf("Calculatrice\n"); // yydebug=1;
+  printf("test du compilateur\n"); // yydebug=1;
   init_mem();
   yyparse();
   return 0;

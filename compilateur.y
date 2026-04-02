@@ -31,9 +31,9 @@ Code :		Declaration {printf("CODE - Déclaration\n"); }
 			} else {
 				int index = get_index($1);
 				if (variable == 0) {
-					int a = init_const($1); // pq int a ? c'est quoi a ? [Warning : unused variable a]
+					int a = init_const(index); // pq int a ? c'est quoi a ? [Warning : unused variable a]
 				} else {
-					int a = init_int($1);
+					int a = init_int(index);
 				}
 				printf("\tAFC %d $3\n", index);
 			}
@@ -61,15 +61,21 @@ Declaration : tCONST tINT tID tSEMICOLON {
 			}
 		} 
 		| tINT tID tSEMICOLON{
-			printf("DECLARATION - int = \n");
+
+			printf("DECLARATION - int \n");
+
 			int adresse = add_int($2);
+
 			if (adresse==-1){
-				perror("\tErreur de compilation : constante déjà déclarée\n");
+				perror("\tErreur de compilation : entier déjà déclarée\n");
 			}
 		}  //int a; allouer de la mémoire (vérifier si y en a plusieurs)
 		| tINT tID tEGAL tNB tSEMICOLON { 
+			
 			printf("DECLARATION - int = \n");
+
 			int adresse = add_int($2);
+			free($2);
 			if (adresse!=-1){
 				if (init_int(adresse)!=-1) {
 					printf("\tAFC %d $4\n", adresse);
@@ -88,9 +94,6 @@ Expr : Expr tADD Expr {
 		| Expr tSOU Expr {
 			printf("EXPR - SOU\n");
 			printf("\tSOU $$ $1 $3\n"); }
-		| Expr tMUL Expr {
-			printf("EXPR - MUL\n");
-			printf("\tMUL $$ $1 $3\n"); }
 		| Expr tMUL Expr {
 			printf("EXPR - MUL\n");
 			printf("\tMUL $$ $1 $3\n"); }
