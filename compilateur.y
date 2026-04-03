@@ -5,8 +5,8 @@
 void yyerror(char *s);
 %}
 %union { int nb; char * var; }
-%token tMAIN tCONST tINT tCOMA tSEMICOLON tAO tAF tPRINT tDEC tEGAL tPO tPF tSOU tADD tDIV tMUL tERROR
-%token <nb> tNB
+%token tMAIN tCONST tINT tCOMA tSEMICOLON tAO tAF tPRINT tDEC tEGAL tPO tPF tSOU tADD tDIV tMUL tEQU tELSE tERROR 
+%token <nb> tNB tIF
 %token <var> tID
 %type <nb> Expr Code Declaration Terme
 %type <var>  Affichage
@@ -17,7 +17,9 @@ void yyerror(char *s);
 %%
 Compiler :		tINT tMAIN tPO tPF tAO Codes tAF // tMAIN tAO Code tAF ?
 
-Codes :  Code Codes {printf("CODES - Code Codes\n");}
+Codes :  Code Codes {printf("CODES - Code Codes\n");
+			afficher_toutes_instructions();			
+		}
 		| Code {printf("CODES - Code tout seul\n");}
 
 Code :		Declaration {printf("CODE - Déclaration\n"); }
@@ -25,9 +27,9 @@ Code :		Declaration {printf("CODE - Déclaration\n"); }
 			printf("CODE - a=1; \n");
 			int variable = is_var($1);
 			if (variable==-1) { //index introuvable
-				perror("\tErreur : %d non déclarée\n");
+				perror("\tErreur : ? variable non déclarée\n"); // trouver le moyen d'afficher la variable en question 
 			} else if(variable==0 && is_init($1) )  {
-				perror("\tErreur : %d est une constante déjà initialisée\n");
+				perror("\tErreur : ? est une constante déjà initialisée\n"); // trouver le moyen d'afficher la constanteqqqqq en question
 			} else {
 				int index = get_index($1);
 				if (variable == 0) {
@@ -35,14 +37,15 @@ Code :		Declaration {printf("CODE - Déclaration\n"); }
 				} else {
 					int a = init_int(index);
 				}
-				printf("\tAFC %d $3\n", index);
+				printf("\tCOP %d $3\n", index);
+				ajouter_instruction("COP", index, $3, -1);
 			}
 			reinit_temp() ; // réinitialise l'index des variables temporaires 
 			free($1); //on free après le strdup du compilateur.l -> TODO pour chaque tID
 		} //a=b+c; b+c est une expression
 		| Affichage {printf("CODE - Affichage\n");}
 		//| Expr tSEMICOLON {printf("CODE - Expr\n"); } si jamais on doit compiler a++/a-- ce serait à changer 
-
+		| If { printf("CODE -On va dans le if\n");}
 Declaration : tCONST tINT tID tSEMICOLON { 
 					printf("DECLARATION - const\n");
 					int adresse = add_const($3) ; 
@@ -53,8 +56,10 @@ Declaration : tCONST tINT tID tSEMICOLON {
 			if (adresse!=-1){
 				if (init_const(adresse)!=-1) {
 					printf("\tAFC %d $5\n", adresse);
+					ajouter_instruction("COP", adresse, $5, -1);
+
 				} else {
-					perror("Erreur : constante déjà initalisée\n");
+					perror("Erreur : constante déjà initalisée\n"); // inutile ? on arrive jamais à cette branche normalement
 				}
 			} else {
 				perror("Erreur de compilation : constante déjà déclarée\n");
@@ -78,35 +83,100 @@ Declaration : tCONST tINT tID tSEMICOLON {
 			free($2);
 			if (adresse!=-1){
 				if (init_int(adresse)!=-1) {
-					printf("\tAFC %d $4\n", adresse);
+					ajouter_instruction("COP",adresse , $4, -1);
 				} else {
-					perror("\tErreur : entier déjà initalisé\n");
+					perror("\tErreur : entier déjà initalisé\n"); // à voir s'il parvient jusqu'ici
 				}
 			} else {
-				perror("\tErreur de compilation : entier déjà déclaré\n");
+				perror("\tErreur de compilation : entier déjà déclaré\n"); // à voir s'il parvient jusqu'ici
 			}	
 		} 
 
 //code de la calculatrice (à refaire avec les bonnes priorités de calcul %left)
 Expr : Expr tADD Expr {
 			printf("EXPR - ADD\n");
-			printf("\tADD $$ $1 $3\n"); }
+//Donner une valeur à dollar dollar --> si l'un des opérandes est une var tep on peut utiliser son adresse, sinon on en créer un autre
+			printf("\tADD $$ $1 $3\n"); 
+			ajouter_instruction("ADD", $$, $1, $3); }
 		| Expr tSOU Expr {
 			printf("EXPR - SOU\n");
-			printf("\tSOU $$ $1 $3\n"); }
+			printf("\tSOU $$ $1 $3\n"); 
+			ajouter_instruction("SOU", $$, $1, $3);}
 		| Expr tMUL Expr {
 			printf("EXPR - MUL\n");
-			printf("\tMUL $$ $1 $3\n"); }
+			printf("\tMUL $$ $1 $3\n");
+			ajouter_instruction("MUL", $$, $1, $3);}
 		| Expr tDIV Expr {
 			printf("EXPR - DIV\n");
-			printf("\tDIV $$ $1 $3\n"); }
+			printf("\tDIV $$ $1 $3\n");
+			ajouter_instruction("COP", $$, $1, $3); }
 		| Terme { $$ = $1; } ;
+		| Expr tEQU Expr {
+			int flag = add_temp() ;
+			$$ = ajouter_instruction("EQU",flag,$1,$3) ;
+		}
+
 Terme :		  tPO Expr tPF { $$ = $2; }
-		| tID { $$ = get_index($1); }
+		| tID { 
+		int index =  get_index($1) ;
+		if (get_index($1)==-1) {
+			perror("Variable non déclarée") ;
+		}
+		else {
+			$$ = get_index($1);
+		}}
 		| tNB { $$ = add_temp(); }
 
 Affichage : tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON {$$ = $5 ; printf("%d\n",$5) ;} 
 // à compléter pour plus tard avec les autres possibilités
+
+If: 
+	tIF tPO Expr tPF 
+		{ 	
+			int ligneJMF = ajouter_instruction("JMF",$3,-1,-1 ) ; // gérer le cas avec les -1
+			$1 = ligneJMF ;
+		}
+	Body
+		{ int current = recuperer_dernier_index() ; // current == 4
+			modifier_instruction($1, "JMF", $3, current + 1, -1) ; // gérer le cas avec les -1 // on part du principe ue JMF 1 ... ne jump pas
+		}
+	
+
+	| tIF tPO Expr tPF
+	{ 	
+		int ligneJMF = ajouter_instruction("JMF",$3,-1,-1 ) ; // gérer le cas avec les -1
+		$1 = ligneJMF ;
+	}
+	Body
+	{ int current = recuperer_dernier_index() ; 
+		modifier_instruction($1, "JMF", $3, current + 2, -1) ;
+		int ligneJMP = ajouter_instruction("JMP", -1, -1, -1) ; 
+		$1 = ligneJMP ;
+	}
+	tELSE Body
+	{ int current = recuperer_dernier_index() ; 
+		modifier_instruction($1,"JMP", current + 1, -1, -1) ;
+	}
+	
+
+	| tIF tPO Expr tPF
+	{ 	
+		int ligne = ajouter_instruction("JMF",$3,-1,-1 ) ; // ligne == L2 // gérer le cas avec les -1
+		$1 = ligne ;
+	}
+	Body
+	{ int current = recuperer_dernier_index() ; 
+		modifier_instruction($1, "JMF", $3, current + 2, -1) ;
+		int ligneJMP = ajouter_instruction("JMP", -1, -1, -1) ; 
+		$1 = ligneJMP ;
+	}
+	tELSE If 
+	{ int current = recuperer_dernier_index() ; // current == 4
+	modifier_instruction($1, "JMP", current + 1, -1, -1) ;
+	}
+	
+
+Body : tAO Codes tAF
 
 /*Calculatrice : Calcul Calculatrice | Calcul ;		
 Calcul :	  Expr tFL { printf("> %d\n", $1); }
@@ -133,5 +203,5 @@ int main(void) {
 //TODO : - if
 // - while
 // - appels de fonctions 
-// a = b
-// fonctions de mem avec le char *  : ne pas comparer les adresse + vérifier les tailels  
+// - free après chaque tID
+// - vérifier qu'on réinitialise bien la mémoire (temp_idx) à chaque fois que c'est nécessaire

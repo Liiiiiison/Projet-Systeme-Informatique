@@ -6,7 +6,7 @@ CC=gcc
 CFLAGS=-Wall -g
 
 OBJ1=y.tab.c lex.yy.c 
-OBJ2=y.tab.c lex.yy.c mem.c
+OBJ2=y.tab.c lex.yy.c mem.c asm_table.c
 
 all: $(BIN)
 

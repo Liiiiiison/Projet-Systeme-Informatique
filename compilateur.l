@@ -25,6 +25,9 @@
 ")"	{ return tPF; }
 "printf" { return tPRINT; } //à voir avec le guillemet
 "%d" {return tDEC; }
+"if" {return tIF;}
+"==" {return tEQU;}
+"else" {return tELSE;}
 
 [A-Za-z][A-Za-z0-9_]* {
 	  yylval.var = strdup(yytext); // strdup -> malloc + strcpy => faire un free après

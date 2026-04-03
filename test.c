@@ -1,5 +1,8 @@
 int main () {
+    const int b = 3;
     int a = 1 ;
-    int b;
-    b=a+a;
+    if (a==1) {
+        a = 2 ;
+    } 
+
 }
