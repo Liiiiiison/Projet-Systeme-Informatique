@@ -6,7 +6,7 @@ void yyerror(char *s);
 %}
 %union { int nb; char * var; }
 %token tMAIN tCONST tINT tCOMA tSEMICOLON tAO tAF tPRINT tDEC tEGAL tPO tPF tSOU tADD tDIV tMUL tEQU tELSE tERROR 
-%token <nb> tNB tIF
+%token <nb> tNB tIF tWHILE
 %token <var> tID
 %type <nb> Expr Code Declaration Terme
 %type <var>  Affichage
@@ -46,6 +46,8 @@ Code :		Declaration {printf("CODE - Déclaration\n"); }
 		| Affichage {printf("CODE - Affichage\n");}
 		//| Expr tSEMICOLON {printf("CODE - Expr\n"); } si jamais on doit compiler a++/a-- ce serait à changer 
 		| If { printf("CODE -On va dans le if\n");}
+		| While { printf("CODE -On va dans le while\n");}
+
 Declaration : tCONST tINT tID tSEMICOLON { 
 					printf("DECLARATION - const\n");
 					int adresse = add_const($3) ; 
@@ -56,7 +58,7 @@ Declaration : tCONST tINT tID tSEMICOLON {
 			if (adresse!=-1){
 				if (init_const(adresse)!=-1) {
 					printf("\tAFC %d $5\n", adresse);
-					ajouter_instruction("COP", adresse, $5, -1);
+					ajouter_instruction("AFC", adresse, $5, -1);
 
 				} else {
 					perror("Erreur : constante déjà initalisée\n"); // inutile ? on arrive jamais à cette branche normalement
@@ -83,14 +85,17 @@ Declaration : tCONST tINT tID tSEMICOLON {
 			free($2);
 			if (adresse!=-1){
 				if (init_int(adresse)!=-1) {
-					ajouter_instruction("COP",adresse , $4, -1);
+					ajouter_instruction("AFC",adresse , $4, -1);
 				} else {
 					perror("\tErreur : entier déjà initalisé\n"); // à voir s'il parvient jusqu'ici
 				}
 			} else {
 				perror("\tErreur de compilation : entier déjà déclaré\n"); // à voir s'il parvient jusqu'ici
 			}	
-		} 
+		} tINT tID tCOMA Var1 tSEMICOLON
+
+Var1 : tID
+	| tID tCOMA Var1
 
 //code de la calculatrice (à refaire avec les bonnes priorités de calcul %left)
 Expr : Expr tADD Expr {
@@ -140,8 +145,6 @@ If:
 		{ int current = recuperer_dernier_index() ; // current == 4
 			modifier_instruction($1, "JMF", $3, current + 1, -1) ; // gérer le cas avec les -1 // on part du principe ue JMF 1 ... ne jump pas
 		}
-	
-
 	| tIF tPO Expr tPF
 	{ 	
 		int ligneJMF = ajouter_instruction("JMF",$3,-1,-1 ) ; // gérer le cas avec les -1
@@ -157,24 +160,35 @@ If:
 	{ int current = recuperer_dernier_index() ; 
 		modifier_instruction($1,"JMP", current + 1, -1, -1) ;
 	}
-	
-
 	| tIF tPO Expr tPF
 	{ 	
 		int ligne = ajouter_instruction("JMF",$3,-1,-1 ) ; // ligne == L2 // gérer le cas avec les -1
 		$1 = ligne ;
 	}
 	Body
-	{ int current = recuperer_dernier_index() ; 
+	{ 
+		int current = recuperer_dernier_index() ; 
 		modifier_instruction($1, "JMF", $3, current + 2, -1) ;
 		int ligneJMP = ajouter_instruction("JMP", -1, -1, -1) ; 
 		$1 = ligneJMP ;
 	}
 	tELSE If 
-	{ int current = recuperer_dernier_index() ; // current == 4
-	modifier_instruction($1, "JMP", current + 1, -1, -1) ;
+	{
+		int current = recuperer_dernier_index() ; // current == 4
+		modifier_instruction($1, "JMP", current + 1, -1, -1) ;
 	}
 	
+While : tWHILE tPO Expr tPF {	
+			int ligneJMF = ajouter_instruction("JMF",$3,-1,-1 ) ; // gérer le cas avec les -1
+			$1 = ligneJMF ;
+		} 
+		Body
+		{ 
+			int current = recuperer_dernier_index() ; 
+			modifier_instruction($1, "JMF", $3, current + 2, -1) ;
+			int ligneJMP = ajouter_instruction("JMP", $1-1, -1, -1) ; 
+			$1 = ligneJMP ;
+		}
 
 Body : tAO Codes tAF
 

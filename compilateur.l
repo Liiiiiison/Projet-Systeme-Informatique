@@ -28,6 +28,7 @@
 "if" {return tIF;}
 "==" {return tEQU;}
 "else" {return tELSE;}
+"while" {return tWHILE;}
 
 [A-Za-z][A-Za-z0-9_]* {
 	  yylval.var = strdup(yytext); // strdup -> malloc + strcpy => faire un free après

@@ -75,7 +75,8 @@ extern int yydebug;
     tERROR = 276,                  /* tERROR  */
     tNB = 277,                     /* tNB  */
     tIF = 278,                     /* tIF  */
-    tID = 279                      /* tID  */
+    tWHILE = 279,                  /* tWHILE  */
+    tID = 280                      /* tID  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -105,7 +106,8 @@ extern int yydebug;
 #define tERROR 276
 #define tNB 277
 #define tIF 278
-#define tID 279
+#define tWHILE 279
+#define tID 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -114,7 +116,7 @@ union YYSTYPE
 #line 7 "compilateur.y"
  int nb; char * var; 
 
-#line 118 "y.tab.h"
+#line 120 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

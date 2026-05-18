@@ -139,7 +139,8 @@ extern int yydebug;
     tERROR = 276,                  /* tERROR  */
     tNB = 277,                     /* tNB  */
     tIF = 278,                     /* tIF  */
-    tID = 279                      /* tID  */
+    tWHILE = 279,                  /* tWHILE  */
+    tID = 280                      /* tID  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -169,7 +170,8 @@ extern int yydebug;
 #define tERROR 276
 #define tNB 277
 #define tIF 278
-#define tID 279
+#define tWHILE 279
+#define tID 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -178,7 +180,7 @@ union YYSTYPE
 #line 7 "compilateur.y"
  int nb; char * var; 
 
-#line 182 "y.tab.c"
+#line 184 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -222,22 +224,27 @@ enum yysymbol_kind_t
   YYSYMBOL_tERROR = 21,                    /* tERROR  */
   YYSYMBOL_tNB = 22,                       /* tNB  */
   YYSYMBOL_tIF = 23,                       /* tIF  */
-  YYSYMBOL_tID = 24,                       /* tID  */
-  YYSYMBOL_YYACCEPT = 25,                  /* $accept  */
-  YYSYMBOL_Compiler = 26,                  /* Compiler  */
-  YYSYMBOL_Codes = 27,                     /* Codes  */
-  YYSYMBOL_Code = 28,                      /* Code  */
-  YYSYMBOL_Declaration = 29,               /* Declaration  */
-  YYSYMBOL_Expr = 30,                      /* Expr  */
-  YYSYMBOL_Terme = 31,                     /* Terme  */
-  YYSYMBOL_Affichage = 32,                 /* Affichage  */
-  YYSYMBOL_If = 33,                        /* If  */
-  YYSYMBOL_34_1 = 34,                      /* $@1  */
-  YYSYMBOL_35_2 = 35,                      /* $@2  */
-  YYSYMBOL_36_3 = 36,                      /* $@3  */
-  YYSYMBOL_37_4 = 37,                      /* $@4  */
-  YYSYMBOL_38_5 = 38,                      /* $@5  */
-  YYSYMBOL_Body = 39                       /* Body  */
+  YYSYMBOL_tWHILE = 24,                    /* tWHILE  */
+  YYSYMBOL_tID = 25,                       /* tID  */
+  YYSYMBOL_YYACCEPT = 26,                  /* $accept  */
+  YYSYMBOL_Compiler = 27,                  /* Compiler  */
+  YYSYMBOL_Codes = 28,                     /* Codes  */
+  YYSYMBOL_Code = 29,                      /* Code  */
+  YYSYMBOL_Declaration = 30,               /* Declaration  */
+  YYSYMBOL_31_1 = 31,                      /* $@1  */
+  YYSYMBOL_Var1 = 32,                      /* Var1  */
+  YYSYMBOL_Expr = 33,                      /* Expr  */
+  YYSYMBOL_Terme = 34,                     /* Terme  */
+  YYSYMBOL_Affichage = 35,                 /* Affichage  */
+  YYSYMBOL_If = 36,                        /* If  */
+  YYSYMBOL_37_2 = 37,                      /* $@2  */
+  YYSYMBOL_38_3 = 38,                      /* $@3  */
+  YYSYMBOL_39_4 = 39,                      /* $@4  */
+  YYSYMBOL_40_5 = 40,                      /* $@5  */
+  YYSYMBOL_41_6 = 41,                      /* $@6  */
+  YYSYMBOL_While = 42,                     /* While  */
+  YYSYMBOL_43_7 = 43,                      /* $@7  */
+  YYSYMBOL_Body = 44                       /* Body  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -565,19 +572,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   81
+#define YYLAST   97
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  25
+#define YYNTOKENS  26
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  15
+#define YYNNTS  19
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  31
+#define YYNRULES  37
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  74
+#define YYNSTATES  90
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   279
+#define YYMAXUTOK   280
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -618,7 +625,8 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+      25
 };
 
 #if YYDEBUG
@@ -626,9 +634,9 @@ static const yytype_int8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    18,    18,    20,    23,    25,    26,    46,    48,    49,
-      53,    68,    78,    96,   101,   105,   109,   113,   114,   119,
-     120,   128,   130,   135,   134,   146,   151,   145,   163,   168,
-     162,   179
+      51,    55,    70,    80,    80,    97,    98,   101,   106,   110,
+     114,   118,   119,   124,   125,   133,   135,   140,   139,   149,
+     154,   148,   164,   169,   163,   181,   181,   193
 };
 #endif
 
@@ -647,9 +655,9 @@ static const char *const yytname[] =
   "\"end of file\"", "error", "\"invalid token\"", "tMAIN", "tCONST",
   "tINT", "tCOMA", "tSEMICOLON", "tAO", "tAF", "tPRINT", "tDEC", "tEGAL",
   "tPO", "tPF", "tSOU", "tADD", "tDIV", "tMUL", "tEQU", "tELSE", "tERROR",
-  "tNB", "tIF", "tID", "$accept", "Compiler", "Codes", "Code",
-  "Declaration", "Expr", "Terme", "Affichage", "If", "$@1", "$@2", "$@3",
-  "$@4", "$@5", "Body", YY_NULLPTR
+  "tNB", "tIF", "tWHILE", "tID", "$accept", "Compiler", "Codes", "Code",
+  "Declaration", "$@1", "Var1", "Expr", "Terme", "Affichage", "If", "$@2",
+  "$@3", "$@4", "$@5", "$@6", "While", "$@7", "Body", YY_NULLPTR
 };
 
 static const char *
@@ -659,7 +667,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-44)
+#define YYPACT_NINF (-54)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -673,14 +681,15 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      13,     8,    29,    32,   -44,    41,    38,     2,    51,    33,
-      45,    46,    48,    52,     2,   -44,   -44,   -44,    39,    36,
-      53,     6,     6,   -44,   -44,    37,   -44,    40,    59,     6,
-     -44,   -44,    17,   -44,    -2,   -44,    44,    60,    47,    23,
-     -44,     6,     6,     6,     6,     6,   -44,    61,   -44,    55,
-     -44,    62,    62,    62,   -15,   -15,    54,    54,    35,   -44,
-      65,     2,   -44,   -44,   -44,   -44,    66,    56,    57,   -44,
-      62,    58,   -44,   -44
+       1,    11,    17,     7,   -54,    15,    13,     8,    25,     9,
+      22,    55,    56,    58,    62,     8,   -54,   -54,   -54,   -54,
+      47,    -4,    63,    -6,    -6,    -6,   -54,   -54,     3,   -54,
+      51,    69,    -6,   -54,   -54,    27,   -54,    33,    21,   -54,
+      54,    70,    53,    40,   -54,    -6,    -6,    -6,    -6,    -6,
+     -54,   -54,    72,   -54,    66,   -54,    73,    73,    73,    48,
+      48,    64,    64,    45,    73,   -54,    77,    78,     8,   -54,
+     -54,   -54,   -54,    59,   -54,    79,    67,    71,    80,   -54,
+      73,    74,    65,   -54,   -54,    83,    85,    65,   -54,   -54
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -689,27 +698,28 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     1,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     4,     5,     7,     8,     0,     0,
-       0,     0,     0,     2,     3,     0,    11,     0,     0,     0,
-      21,    20,     0,    17,     0,     9,     0,     0,     0,     0,
-      23,     0,     0,     0,     0,     0,     6,     0,    12,     0,
-      19,     0,     0,     0,    14,    13,    16,    15,    18,    10,
-       0,     0,    24,    26,    29,    22,     0,     0,     0,    31,
-       0,     0,    27,    30
+       0,     0,     0,     0,     0,     4,     5,     7,     8,     9,
+       0,     0,     0,     0,     0,     0,     2,     3,     0,    12,
+       0,     0,     0,    25,    24,     0,    21,     0,     0,    10,
+       0,     0,     0,     0,    27,     0,     0,     0,     0,     0,
+      35,     6,     0,    13,     0,    23,     0,     0,     0,    18,
+      17,    20,    19,    22,     0,    11,     0,     0,     0,    28,
+      30,    33,    36,     0,    26,     0,     0,     0,     0,    37,
+       0,     0,     0,    31,    34,    15,     0,     0,    14,    16
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -44,   -44,   -14,   -44,   -44,   -21,   -44,   -44,     3,   -44,
-     -44,   -44,   -44,   -44,   -43
+     -54,   -54,   -15,   -54,   -54,   -54,     6,   -23,   -54,   -54,
+      14,   -54,   -54,   -54,   -54,   -54,   -54,   -54,   -53
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,    13,    14,    15,    32,    33,    16,    17,    51,
-      52,    67,    53,    68,    62
+       0,     2,    14,    15,    16,    66,    86,    35,    36,    17,
+      18,    56,    57,    76,    58,    77,    19,    64,    69
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -717,60 +727,63 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      24,    34,    43,    44,    45,    46,     8,     9,    39,    63,
-      64,     3,    10,    41,    42,    43,    44,    45,     1,    29,
-      54,    55,    56,    57,    58,    11,    12,    72,    30,     4,
-      31,    40,    41,    42,    43,    44,    45,    50,    41,    42,
-      43,    44,    45,    26,    35,     5,     7,    66,    27,    36,
-      41,    42,    43,    44,    45,     6,    18,    19,    20,    21,
-      22,    23,    37,    25,    28,    38,    47,    48,    59,    60,
-      61,    49,    65,    45,    73,    69,    70,    71,     0,     0,
-       0,    11
+      27,    37,    38,    29,    70,    71,     1,    32,    30,    43,
+      39,    72,     8,     9,     3,    40,    33,     4,    10,    34,
+       5,     7,    59,    60,    61,    62,    63,    83,    51,     6,
+      20,    11,    12,    13,    21,    22,    45,    46,    47,    48,
+      49,    44,    45,    46,    47,    48,    49,    50,    45,    46,
+      47,    48,    49,    75,    55,    45,    46,    47,    48,    49,
+      45,    46,    47,    48,    49,    47,    48,    49,    23,    24,
+      25,    26,    28,    41,    31,    42,    52,    53,    54,    65,
+      67,    68,    73,    49,    78,    74,    82,    80,    79,    87,
+      85,    81,    88,    89,     0,    84,     0,    11
 };
 
 static const yytype_int8 yycheck[] =
 {
-      14,    22,    17,    18,    19,     7,     4,     5,    29,    52,
-      53,     3,    10,    15,    16,    17,    18,    19,     5,    13,
-      41,    42,    43,    44,    45,    23,    24,    70,    22,     0,
-      24,    14,    15,    16,    17,    18,    19,    14,    15,    16,
-      17,    18,    19,     7,     7,    13,     8,    61,    12,    12,
-      15,    16,    17,    18,    19,    14,     5,    24,    13,    13,
-      12,     9,    22,    24,    11,     6,    22,     7,     7,    14,
-       8,    24,     7,    19,    71,     9,    20,    20,    -1,    -1,
-      -1,    23
+      15,    24,    25,     7,    57,    58,     5,    13,    12,    32,
+       7,    64,     4,     5,     3,    12,    22,     0,    10,    25,
+      13,     8,    45,    46,    47,    48,    49,    80,     7,    14,
+       5,    23,    24,    25,    25,    13,    15,    16,    17,    18,
+      19,    14,    15,    16,    17,    18,    19,    14,    15,    16,
+      17,    18,    19,    68,    14,    15,    16,    17,    18,    19,
+      15,    16,    17,    18,    19,    17,    18,    19,    13,    13,
+      12,     9,    25,    22,    11,     6,    22,     7,    25,     7,
+      14,     8,     5,    19,    25,     7,     6,    20,     9,     6,
+      25,    20,     7,    87,    -1,    81,    -1,    23
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     5,    26,     3,     0,    13,    14,     8,     4,     5,
-      10,    23,    24,    27,    28,    29,    32,    33,     5,    24,
-      13,    13,    12,     9,    27,    24,     7,    12,    11,    13,
-      22,    24,    30,    31,    30,     7,    12,    22,     6,    30,
-      14,    15,    16,    17,    18,    19,     7,    22,     7,    24,
-      14,    34,    35,    37,    30,    30,    30,    30,    30,     7,
-      14,     8,    39,    39,    39,     7,    27,    36,    38,     9,
-      20,    20,    39,    33
+       0,     5,    27,     3,     0,    13,    14,     8,     4,     5,
+      10,    23,    24,    25,    28,    29,    30,    35,    36,    42,
+       5,    25,    13,    13,    13,    12,     9,    28,    25,     7,
+      12,    11,    13,    22,    25,    33,    34,    33,    33,     7,
+      12,    22,     6,    33,    14,    15,    16,    17,    18,    19,
+      14,     7,    22,     7,    25,    14,    37,    38,    40,    33,
+      33,    33,    33,    33,    43,     7,    31,    14,     8,    44,
+      44,    44,    44,     5,     7,    28,    39,    41,    25,     9,
+      20,    20,     6,    44,    36,    25,    32,     6,     7,    32
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    25,    26,    27,    27,    28,    28,    28,    28,    29,
-      29,    29,    29,    30,    30,    30,    30,    30,    30,    31,
-      31,    31,    32,    34,    33,    35,    36,    33,    37,    38,
-      33,    39
+       0,    26,    27,    28,    28,    29,    29,    29,    29,    29,
+      30,    30,    30,    31,    30,    32,    32,    33,    33,    33,
+      33,    33,    33,    34,    34,    34,    35,    37,    36,    38,
+      39,    36,    40,    41,    36,    43,    42,    44
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     7,     2,     1,     1,     4,     1,     1,     4,
-       6,     3,     5,     3,     3,     3,     3,     1,     3,     3,
-       1,     1,     7,     0,     6,     0,     0,     9,     0,     0,
-       9,     3
+       0,     2,     7,     2,     1,     1,     4,     1,     1,     1,
+       4,     6,     3,     0,    11,     1,     3,     3,     3,     3,
+       3,     1,     3,     3,     1,     1,     7,     0,     6,     0,
+       0,     9,     0,     0,     9,     0,     6,     3
 };
 
 
@@ -1238,19 +1251,19 @@ yyreduce:
                     {printf("CODES - Code Codes\n");
 			afficher_toutes_instructions();			
 		}
-#line 1242 "y.tab.c"
+#line 1255 "y.tab.c"
     break;
 
   case 4: /* Codes: Code  */
 #line 23 "compilateur.y"
                        {printf("CODES - Code tout seul\n");}
-#line 1248 "y.tab.c"
+#line 1261 "y.tab.c"
     break;
 
   case 5: /* Code: Declaration  */
 #line 25 "compilateur.y"
                             {printf("CODE - Déclaration\n"); }
-#line 1254 "y.tab.c"
+#line 1267 "y.tab.c"
     break;
 
   case 6: /* Code: tID tEGAL Expr tSEMICOLON  */
@@ -1275,39 +1288,45 @@ yyreduce:
 			reinit_temp() ; // réinitialise l'index des variables temporaires 
 			free((yyvsp[-3].var)); //on free après le strdup du compilateur.l -> TODO pour chaque tID
 		}
-#line 1279 "y.tab.c"
+#line 1292 "y.tab.c"
     break;
 
   case 7: /* Code: Affichage  */
 #line 46 "compilateur.y"
                             {printf("CODE - Affichage\n");}
-#line 1285 "y.tab.c"
+#line 1298 "y.tab.c"
     break;
 
   case 8: /* Code: If  */
 #line 48 "compilateur.y"
                      { printf("CODE -On va dans le if\n");}
-#line 1291 "y.tab.c"
+#line 1304 "y.tab.c"
     break;
 
-  case 9: /* Declaration: tCONST tINT tID tSEMICOLON  */
+  case 9: /* Code: While  */
 #line 49 "compilateur.y"
+                        { printf("CODE -On va dans le while\n");}
+#line 1310 "y.tab.c"
+    break;
+
+  case 10: /* Declaration: tCONST tINT tID tSEMICOLON  */
+#line 51 "compilateur.y"
                                          { 
 					printf("DECLARATION - const\n");
 					int adresse = add_const((yyvsp[-1].var)) ; 
 				}
-#line 1300 "y.tab.c"
+#line 1319 "y.tab.c"
     break;
 
-  case 10: /* Declaration: tCONST tINT tID tEGAL tNB tSEMICOLON  */
-#line 53 "compilateur.y"
+  case 11: /* Declaration: tCONST tINT tID tEGAL tNB tSEMICOLON  */
+#line 55 "compilateur.y"
                                                        { 
 			printf("DECLARATION - const = \n");
 			int adresse=add_const((yyvsp[-3].var));
 			if (adresse!=-1){
 				if (init_const(adresse)!=-1) {
 					printf("\tAFC %d $5\n", adresse);
-					ajouter_instruction("COP", adresse, (yyvsp[-1].nb), -1);
+					ajouter_instruction("AFC", adresse, (yyvsp[-1].nb), -1);
 
 				} else {
 					perror("Erreur : constante déjà initalisée\n"); // inutile ? on arrive jamais à cette branche normalement
@@ -1316,11 +1335,11 @@ yyreduce:
 				perror("Erreur de compilation : constante déjà déclarée\n");
 			}
 		}
-#line 1320 "y.tab.c"
+#line 1339 "y.tab.c"
     break;
 
-  case 11: /* Declaration: tINT tID tSEMICOLON  */
-#line 68 "compilateur.y"
+  case 12: /* Declaration: tINT tID tSEMICOLON  */
+#line 70 "compilateur.y"
                                      {
 
 			printf("DECLARATION - int \n");
@@ -1331,11 +1350,11 @@ yyreduce:
 				perror("\tErreur de compilation : entier déjà déclarée\n");
 			}
 		}
-#line 1335 "y.tab.c"
+#line 1354 "y.tab.c"
     break;
 
-  case 12: /* Declaration: tINT tID tEGAL tNB tSEMICOLON  */
-#line 78 "compilateur.y"
+  case 13: /* $@1: %empty  */
+#line 80 "compilateur.y"
                                                 { 
 			
 			printf("DECLARATION - int = \n");
@@ -1344,7 +1363,7 @@ yyreduce:
 			free((yyvsp[-3].var));
 			if (adresse!=-1){
 				if (init_int(adresse)!=-1) {
-					ajouter_instruction("COP",adresse , (yyvsp[-1].nb), -1);
+					ajouter_instruction("AFC",adresse , (yyvsp[-1].nb), -1);
 				} else {
 					perror("\tErreur : entier déjà initalisé\n"); // à voir s'il parvient jusqu'ici
 				}
@@ -1352,69 +1371,69 @@ yyreduce:
 				perror("\tErreur de compilation : entier déjà déclaré\n"); // à voir s'il parvient jusqu'ici
 			}	
 		}
-#line 1356 "y.tab.c"
+#line 1375 "y.tab.c"
     break;
 
-  case 13: /* Expr: Expr tADD Expr  */
-#line 96 "compilateur.y"
+  case 17: /* Expr: Expr tADD Expr  */
+#line 101 "compilateur.y"
                       {
 			printf("EXPR - ADD\n");
 //Donner une valeur à dollar dollar --> si l'un des opérandes est une var tep on peut utiliser son adresse, sinon on en créer un autre
 			printf("\tADD $$ $1 $3\n"); 
 			ajouter_instruction("ADD", (yyval.nb), (yyvsp[-2].nb), (yyvsp[0].nb)); }
-#line 1366 "y.tab.c"
+#line 1385 "y.tab.c"
     break;
 
-  case 14: /* Expr: Expr tSOU Expr  */
-#line 101 "compilateur.y"
+  case 18: /* Expr: Expr tSOU Expr  */
+#line 106 "compilateur.y"
                                  {
 			printf("EXPR - SOU\n");
 			printf("\tSOU $$ $1 $3\n"); 
 			ajouter_instruction("SOU", (yyval.nb), (yyvsp[-2].nb), (yyvsp[0].nb));}
-#line 1375 "y.tab.c"
+#line 1394 "y.tab.c"
     break;
 
-  case 15: /* Expr: Expr tMUL Expr  */
-#line 105 "compilateur.y"
+  case 19: /* Expr: Expr tMUL Expr  */
+#line 110 "compilateur.y"
                                  {
 			printf("EXPR - MUL\n");
 			printf("\tMUL $$ $1 $3\n");
 			ajouter_instruction("MUL", (yyval.nb), (yyvsp[-2].nb), (yyvsp[0].nb));}
-#line 1384 "y.tab.c"
+#line 1403 "y.tab.c"
     break;
 
-  case 16: /* Expr: Expr tDIV Expr  */
-#line 109 "compilateur.y"
+  case 20: /* Expr: Expr tDIV Expr  */
+#line 114 "compilateur.y"
                                  {
 			printf("EXPR - DIV\n");
 			printf("\tDIV $$ $1 $3\n");
 			ajouter_instruction("COP", (yyval.nb), (yyvsp[-2].nb), (yyvsp[0].nb)); }
-#line 1393 "y.tab.c"
+#line 1412 "y.tab.c"
     break;
 
-  case 17: /* Expr: Terme  */
-#line 113 "compilateur.y"
+  case 21: /* Expr: Terme  */
+#line 118 "compilateur.y"
                         { (yyval.nb) = (yyvsp[0].nb); }
-#line 1399 "y.tab.c"
+#line 1418 "y.tab.c"
     break;
 
-  case 18: /* Expr: Expr tEQU Expr  */
-#line 114 "compilateur.y"
+  case 22: /* Expr: Expr tEQU Expr  */
+#line 119 "compilateur.y"
                                  {
 			int flag = add_temp() ;
 			(yyval.nb) = ajouter_instruction("EQU",flag,(yyvsp[-2].nb),(yyvsp[0].nb)) ;
 		}
-#line 1408 "y.tab.c"
+#line 1427 "y.tab.c"
     break;
 
-  case 19: /* Terme: tPO Expr tPF  */
-#line 119 "compilateur.y"
+  case 23: /* Terme: tPO Expr tPF  */
+#line 124 "compilateur.y"
                                { (yyval.nb) = (yyvsp[-1].nb); }
-#line 1414 "y.tab.c"
+#line 1433 "y.tab.c"
     break;
 
-  case 20: /* Terme: tID  */
-#line 120 "compilateur.y"
+  case 24: /* Terme: tID  */
+#line 125 "compilateur.y"
                       { 
 		int index =  get_index((yyvsp[0].var)) ;
 		if (get_index((yyvsp[0].var))==-1) {
@@ -1423,94 +1442,116 @@ yyreduce:
 		else {
 			(yyval.nb) = get_index((yyvsp[0].var));
 		}}
-#line 1427 "y.tab.c"
+#line 1446 "y.tab.c"
     break;
 
-  case 21: /* Terme: tNB  */
-#line 128 "compilateur.y"
+  case 25: /* Terme: tNB  */
+#line 133 "compilateur.y"
                       { (yyval.nb) = add_temp(); }
-#line 1433 "y.tab.c"
+#line 1452 "y.tab.c"
     break;
 
-  case 22: /* Affichage: tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON  */
-#line 130 "compilateur.y"
-                                                     {(yyval.var) = (yyvsp[-2].var) ; printf("%d\n",(yyvsp[-2].var)) ;}
-#line 1439 "y.tab.c"
-    break;
-
-  case 23: /* $@1: %empty  */
+  case 26: /* Affichage: tPRINT tPO tDEC tCOMA tID tPF tSEMICOLON  */
 #line 135 "compilateur.y"
+                                                     {(yyval.var) = (yyvsp[-2].var) ; printf("%d\n",(yyvsp[-2].var)) ;}
+#line 1458 "y.tab.c"
+    break;
+
+  case 27: /* $@2: %empty  */
+#line 140 "compilateur.y"
                 { 	
 			int ligneJMF = ajouter_instruction("JMF",(yyvsp[-1].nb),-1,-1 ) ; // gérer le cas avec les -1
 			(yyvsp[-3].nb) = ligneJMF ;
 		}
-#line 1448 "y.tab.c"
+#line 1467 "y.tab.c"
     break;
 
-  case 24: /* If: tIF tPO Expr tPF $@1 Body  */
-#line 140 "compilateur.y"
+  case 28: /* If: tIF tPO Expr tPF $@2 Body  */
+#line 145 "compilateur.y"
                 { int current = recuperer_dernier_index() ; // current == 4
 			modifier_instruction((yyvsp[-5].nb), "JMF", (yyvsp[-3].nb), current + 1, -1) ; // gérer le cas avec les -1 // on part du principe ue JMF 1 ... ne jump pas
 		}
-#line 1456 "y.tab.c"
+#line 1475 "y.tab.c"
     break;
 
-  case 25: /* $@2: %empty  */
-#line 146 "compilateur.y"
+  case 29: /* $@3: %empty  */
+#line 149 "compilateur.y"
         { 	
 		int ligneJMF = ajouter_instruction("JMF",(yyvsp[-1].nb),-1,-1 ) ; // gérer le cas avec les -1
 		(yyvsp[-3].nb) = ligneJMF ;
 	}
-#line 1465 "y.tab.c"
+#line 1484 "y.tab.c"
     break;
 
-  case 26: /* $@3: %empty  */
-#line 151 "compilateur.y"
+  case 30: /* $@4: %empty  */
+#line 154 "compilateur.y"
         { int current = recuperer_dernier_index() ; 
 		modifier_instruction((yyvsp[-5].nb), "JMF", (yyvsp[-3].nb), current + 2, -1) ;
 		int ligneJMP = ajouter_instruction("JMP", -1, -1, -1) ; 
 		(yyvsp[-5].nb) = ligneJMP ;
 	}
-#line 1475 "y.tab.c"
+#line 1494 "y.tab.c"
     break;
 
-  case 27: /* If: tIF tPO Expr tPF $@2 Body $@3 tELSE Body  */
-#line 157 "compilateur.y"
+  case 31: /* If: tIF tPO Expr tPF $@3 Body $@4 tELSE Body  */
+#line 160 "compilateur.y"
         { int current = recuperer_dernier_index() ; 
 		modifier_instruction((yyvsp[-8].nb),"JMP", current + 1, -1, -1) ;
-	}
-#line 1483 "y.tab.c"
-    break;
-
-  case 28: /* $@4: %empty  */
-#line 163 "compilateur.y"
-        { 	
-		int ligne = ajouter_instruction("JMF",(yyvsp[-1].nb),-1,-1 ) ; // ligne == L2 // gérer le cas avec les -1
-		(yyvsp[-3].nb) = ligne ;
-	}
-#line 1492 "y.tab.c"
-    break;
-
-  case 29: /* $@5: %empty  */
-#line 168 "compilateur.y"
-        { int current = recuperer_dernier_index() ; 
-		modifier_instruction((yyvsp[-5].nb), "JMF", (yyvsp[-3].nb), current + 2, -1) ;
-		int ligneJMP = ajouter_instruction("JMP", -1, -1, -1) ; 
-		(yyvsp[-5].nb) = ligneJMP ;
 	}
 #line 1502 "y.tab.c"
     break;
 
-  case 30: /* If: tIF tPO Expr tPF $@4 Body $@5 tELSE If  */
-#line 174 "compilateur.y"
-        { int current = recuperer_dernier_index() ; // current == 4
-	modifier_instruction((yyvsp[-8].nb), "JMP", current + 1, -1, -1) ;
+  case 32: /* $@5: %empty  */
+#line 164 "compilateur.y"
+        { 	
+		int ligne = ajouter_instruction("JMF",(yyvsp[-1].nb),-1,-1 ) ; // ligne == L2 // gérer le cas avec les -1
+		(yyvsp[-3].nb) = ligne ;
 	}
-#line 1510 "y.tab.c"
+#line 1511 "y.tab.c"
+    break;
+
+  case 33: /* $@6: %empty  */
+#line 169 "compilateur.y"
+        { 
+		int current = recuperer_dernier_index() ; 
+		modifier_instruction((yyvsp[-5].nb), "JMF", (yyvsp[-3].nb), current + 2, -1) ;
+		int ligneJMP = ajouter_instruction("JMP", -1, -1, -1) ; 
+		(yyvsp[-5].nb) = ligneJMP ;
+	}
+#line 1522 "y.tab.c"
+    break;
+
+  case 34: /* If: tIF tPO Expr tPF $@5 Body $@6 tELSE If  */
+#line 176 "compilateur.y"
+        {
+		int current = recuperer_dernier_index() ; // current == 4
+		modifier_instruction((yyvsp[-8].nb), "JMP", current + 1, -1, -1) ;
+	}
+#line 1531 "y.tab.c"
+    break;
+
+  case 35: /* $@7: %empty  */
+#line 181 "compilateur.y"
+                            {	
+			int ligneJMF = ajouter_instruction("JMF",(yyvsp[-1].nb),-1,-1 ) ; // gérer le cas avec les -1
+			(yyvsp[-3].nb) = ligneJMF ;
+		}
+#line 1540 "y.tab.c"
+    break;
+
+  case 36: /* While: tWHILE tPO Expr tPF $@7 Body  */
+#line 186 "compilateur.y"
+                { 
+			int current = recuperer_dernier_index() ; 
+			modifier_instruction((yyvsp[-5].nb), "JMF", (yyvsp[-3].nb), current + 2, -1) ;
+			int ligneJMP = ajouter_instruction("JMP", (yyvsp[-5].nb)-1, -1, -1) ; 
+			(yyvsp[-5].nb) = ligneJMP ;
+		}
+#line 1551 "y.tab.c"
     break;
 
 
-#line 1514 "y.tab.c"
+#line 1555 "y.tab.c"
 
       default: break;
     }
@@ -1703,7 +1744,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 194 "compilateur.y"
+#line 208 "compilateur.y"
 
 void yyerror(char *s) { fprintf(stderr, "%s\n", s); }
 int main(void) {
